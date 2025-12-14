@@ -2,9 +2,15 @@ require('dotenv').config();
 
 let express = require('express');
 let bodyParser = require('body-parser');
+let mongoose = require('mongoose');
 let app = express();
 
 console.log("Hello World");
+
+// Connect to MongoDB Atlas
+mongoose.connect(process.env.MONGO_URI, { useNewUrlParser: true, useUnifiedTopology: true })
+  .then(() => console.log("MongoDB connected successfully"))
+  .catch(err => console.error("MongoDB connection error:", err));
 
 // Root-level logger middleware
 app.use(function (req, res, next) {
@@ -12,7 +18,7 @@ app.use(function (req, res, next) {
   next();
 });
 
-// Body-parser middleware for URL-encoded data
+// Body-parser middleware
 app.use(bodyParser.urlencoded({ extended: false }));
 
 // Serve static files
@@ -28,21 +34,16 @@ app.get('/now', function (req, res, next) {
 
 // Echo server
 app.get('/:word/echo', function (req, res) {
-  const word = req.params.word;
-  res.json({ echo: word });
+  res.json({ echo: req.params.word });
 });
 
-// Combined GET and POST /name endpoint
+// GET and POST /name
 app.route('/name')
   .get(function (req, res) {
-    const firstName = req.query.first;
-    const lastName = req.query.last;
-    res.json({ name: `${firstName} ${lastName}` });
+    res.json({ name: `${req.query.first} ${req.query.last}` });
   })
   .post(function (req, res) {
-    const firstName = req.body.first;
-    const lastName = req.body.last;
-    res.json({ name: `${firstName} ${lastName}` });
+    res.json({ name: `${req.body.first} ${req.body.last}` });
   });
 
 // Serve HTML
@@ -53,9 +54,7 @@ app.get('/', function (req, res) {
 // JSON API
 app.get('/json', function (req, res) {
   let message = "Hello json";
-  if (process.env.MESSAGE_STYLE === "uppercase") {
-    message = message.toUpperCase();
-  }
+  if (process.env.MESSAGE_STYLE === "uppercase") message = message.toUpperCase();
   res.json({ message: message });
 });
 
