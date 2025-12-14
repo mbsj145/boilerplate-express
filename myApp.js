@@ -22,10 +22,18 @@ app.get('/now', function (req, res, next) {
   res.json({ time: req.time });
 });
 
-// Echo server: route parameter
+// Echo server
 app.get('/:word/echo', function (req, res) {
   const word = req.params.word;
   res.json({ echo: word });
+});
+
+// GET /name endpoint with query string
+app.get('/name', function (req, res) {
+  const firstName = req.query.first;
+  const lastName = req.query.last;
+
+  res.json({ name: `${firstName} ${lastName}` });
 });
 
 // Serve HTML
