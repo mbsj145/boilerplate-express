@@ -14,12 +14,18 @@ app.use(function (req, res, next) {
 // Serve static files
 app.use('/public', express.static(__dirname + '/public'));
 
-// Time server: chained middleware
+// Time server
 app.get('/now', function (req, res, next) {
   req.time = new Date().toString();
   next();
 }, function (req, res) {
   res.json({ time: req.time });
+});
+
+// Echo server: route parameter
+app.get('/:word/echo', function (req, res) {
+  const word = req.params.word;
+  res.json({ echo: word });
 });
 
 // Serve HTML
