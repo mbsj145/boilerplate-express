@@ -1,4 +1,6 @@
-require('dotenv').config();
-let mongoose = require('mongoose');
+/** # MONGOOSE SETUP #
+/*  ================== */
 
-mongoose.connect('mongodb+srv://muhammadbilal_db_user:nnFnqxi73A9MqkHz@cluster0.rcxmcoo.mongodb.net/test?retryWrites=true&w=majority', { useNewUrlParser: true, useUnifiedTopology: true });
+/** 1) Install & Set up mongoose */
+const mongoose = require('mongoose');
+mongoose.connect(process.env.MONGO_URI);
