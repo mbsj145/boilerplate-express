@@ -1,9 +1,15 @@
-require('dotenv').config();   // 👈 MUST be at the top
+require('dotenv').config();
 
 let express = require('express');
 let app = express();
 
 console.log("Hello World");
+
+// 👇 Root-level logger middleware
+app.use(function (req, res, next) {
+  console.log(req.method + " " + req.path + " - " + req.ip);
+  next();
+});
 
 // Static files
 app.use('/public', express.static(__dirname + '/public'));
@@ -13,7 +19,7 @@ app.get('/', function (req, res) {
   res.sendFile(__dirname + '/views/index.html');
 });
 
-// 👇 JSON API with env variable
+// JSON API
 app.get('/json', function (req, res) {
   let message = "Hello json";
 
